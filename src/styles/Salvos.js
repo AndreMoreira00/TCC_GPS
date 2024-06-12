@@ -1,0 +1,70 @@
+import { StyleSheet } from "react-native";
+
+export default StyleSheet.create({
+  containerPrincipal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f8f8f8',
+    padding: 20,
+  },
+  containerRotas: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  containerFormulario: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    marginTop: 20,
+  },
+  tituloPrincipal: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#5252DF',
+    marginBottom: 5,
+    textAlign: 'center',
+  },
+  // tituloSecundarios: {
+  //   fontSize: 24,
+  //   fontWeight: '600',
+  //   color: '#333',
+  //   marginBottom: 8,
+  // },
+  tituloTerciario: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 2,
+    textAlign: "center",
+  },
+  botao: {
+    paddingVertical: 10,
+    paddingHorizontal: 21,
+    backgroundColor: '#6060B4',
+    borderRadius: 25,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+    marginTop: 5,
+  },
+  textInput: {
+    height: 45,
+    width: 320,
+    borderColor: '#6060B4',
+    borderWidth: 1,
+    borderRadius: 25,
+    paddingHorizontal: 17,
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+    marginTop: 3,
+  }
+})
