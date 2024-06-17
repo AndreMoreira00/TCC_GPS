@@ -4,8 +4,7 @@ import MapView, {Marker, Polyline} from "react-native-maps";
 import axios from "axios";
 import * as Location from "expo-location";
 import { CarregarEndereco } from "../functions/Carregar";
-
-
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function MapRotas(){
 
@@ -14,24 +13,49 @@ export default function MapRotas(){
   const [route, setRoute] = useState([]);
   const [localizacao, definirLocalizacao ] = useState({});
 
-  // Local atual
+  // const [hasFocusedOnce, setHasFocusedOnce] = useState(false);
+  
   useEffect(function() {
+    // Local atual
     async function ObterLocaizacao(){
       await Location.requestForegroundPermissionsAsync()
       definirLocalizacao(await Location.getCurrentPositionAsync({}))
     }
+    CarregarEndereco().then(function(dados){
+      const add = JSON.parse(dados || "{}")
+      alert(add)
+      definirAddress(add)
+      });
     ObterLocaizacao()
   }, [])
 
-  // Carregar endereço do Store
-  useEffect(function(){
+  useFocusEffect(React.useCallback(() => {
+    // Aqui você pode colocar código para ser executado quando a tela estiver em foco
+    // console.log('Tela está em foco, recarregar dados se necessário');
     CarregarEndereco().then(function(dados){
-    const add = JSON.parse(dados || "{}")
-    alert(add)
-    definirAddress(add)
+      const add = JSON.parse(dados || "{}")
+      alert(add)
+      definirAddress(add)
+      getCoordinates(address);
+      const fetchRoute = async () => {
+        try {
+          const response = await axios.get(`http://router.project-osrm.org/route/v1/driving/${localizacao.coords.longitude},${localizacao.coords.latitude};${coordinates.longitude},${coordinates.latitude}?overview=full&geometries=geojson`);
+          const data = response.data;
+          const routeCoordinates = data.routes[0].geometry.coordinates.map(coord => ({
+            latitude: coord[1],
+            longitude: coord[0]
+          }));
+            setRoute(routeCoordinates);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchRoute();
     });
   }, [])
+)
 
+  // Coordenadas de destino
   const getCoordinates = async (address) => {
     try {
       const response = await axios.get('https://nominatim.openstreetmap.org/search', {
@@ -49,7 +73,7 @@ export default function MapRotas(){
         // console.log(lon)
         return setCoordinates({latitude: parseFloat(lat), longitude: parseFloat(lon)});
       } else {
-        throw new Error('No coordinates found for the given address');
+        throw new Error('Endereco não encontrado');
       }
     } catch (error) {
       console.error(error);
@@ -57,17 +81,11 @@ export default function MapRotas(){
     }
   };
 
+
   useEffect(() =>{
-    const address = 'Estr. dos Romeiros, 795 - Centro, Barueri - SP, Brazil';
-    const coords = getCoordinates(address);
-    // console.log(coords)
-    // setCoordinates(coords)
+    getCoordinates(address);
   }, [address])
 
-  // const teste = async() =>{
-  //   const coords = await getCoordinates(address);
-  //   setCoordinates(coords)
-  // }
 
   useEffect(() => {
     const fetchRoute = async () => {
@@ -84,8 +102,7 @@ export default function MapRotas(){
       }
     };
     fetchRoute();
-    // teste();
-  }, [])
+  }, [coordinates])
 
   return(
     <View>
@@ -94,11 +111,11 @@ export default function MapRotas(){
         <>
           {coordinates && ( 
             <View>
-               <Text>Latitude: {coordinates.latitude}</Text>
+               {/* <Text>Latitude: {coordinates.latitude}</Text>
                <Text>Longitude: {coordinates.longitude}</Text>
                <Text>Latitude: {localizacao.coords.latitude}</Text>
-               <Text>Longitude: {localizacao.coords.longitude}</Text>
-              {/* <MapView 
+               <Text>Longitude: {localizacao.coords.longitude}</Text> */}
+              <MapView 
                 initialRegion={{
                   latitude: localizacao.coords.latitude,
                   longitude: localizacao.coords.longitude,
@@ -108,9 +125,9 @@ export default function MapRotas(){
                 style={styles.map}
               >
                 <Marker coordinate={{latitude: localizacao.coords.latitude, longitude: localizacao.coords.longitude}}/>
-                <Marker coordinate={{latitude: coordinates.latitude,longitude: coordinates.longitude}}/>
+                <Marker coordinate={{latitude: coordinates.latitude, longitude: coordinates.longitude}}/>
               {route.length > 0 && <Polyline coordinates={route} strokeColor="#000" strokeWidth={3} />}
-              </MapView> */}
+              </MapView>
             </View>
             )}
         </>  
@@ -119,12 +136,12 @@ export default function MapRotas(){
   );
 }
 
-// const styles = StyleSheet.create({
-//   tela: {flex: 1},
-//   indicador: {backgroundColor:"#144272", padding:32,},
-//   indicadorTexto: {color:"white", fontSize:20,},
-//   map: {
-//     height: "100%", width: "100%",
-//     marginTop: 30,
-//   },
-// });
+const styles = StyleSheet.create({
+  tela: {flex: 1},
+  indicador: {backgroundColor:"#144272", padding:32,},
+  indicadorTexto: {color:"white", fontSize:20,},
+  map: {
+    height: "100%", width: "100%",
+    marginTop: 30,
+  },
+});

@@ -1,4 +1,4 @@
-import {View, Text, TextInput, Pressable, Image, Dimensions} from "react-native";
+import {View, Text, TextInput, Pressable} from "react-native";
 import React, { useEffect, useState } from "react";
 import { Address } from "../functions/Salvar";
 import styles from "../styles/Salvos";
@@ -15,7 +15,7 @@ export default function Home(){
     definirAddress(address)
     Address(address)
     navigation.navigate("MapRotas")
-    alert("Buscando Rota")
+    // alert("Buscando Rota")
   }
 
   return <View style={styles.containerPrincipal}>

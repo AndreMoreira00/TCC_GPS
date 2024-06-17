@@ -4,6 +4,7 @@ import {SalvarAddress, Address} from "../functions/Salvar";
 import {CarregarLista} from "../functions/Carregar";
 import styles from "../styles/Salvos";
 import { useNavigation } from "@react-navigation/native";
+// import SalvarConteudo from "../functions/Salvar";
 
 export default function Salvos(){
 
@@ -27,16 +28,17 @@ export default function Salvos(){
     },[formulario])
     
     function SalvarFormulario(){
+        // SalvarConteudo(formulario)
         SalvarAddress(formulario.nome, formulario.endereco)
-        Address(formulario.endereco)
+        // Address(formulario.endereco)
         definirFormulario({nome:"", endereco:""})
         alert("Salvo com sucesso!")
     }
     
     function SalvarRota(){
-        // Address(formulario.endereco)
+        Address(resultados.endereco)
         navigation.navigate("MapRotas")
-        alert("Buscando Rota")
+        // alert("Buscando Rota")
     }
     
     return (
