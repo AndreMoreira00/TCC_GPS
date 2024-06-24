@@ -3,19 +3,18 @@ import React, { useEffect, useState } from "react";
 import { Address } from "../functions/Salvar";
 import styles from "../styles/Salvos";
 import { useNavigation } from "@react-navigation/native";
+import { ObterConteudo } from "../functions/Carregar";
 
 
 export default function Home(){
   
   const navigation = useNavigation();
-
   const [address, definirAddress] = useState('')
 
   async function SalvarAddress(){
     definirAddress(address)
     Address(address)
     navigation.navigate("MapRotas")
-    // alert("Buscando Rota")
   }
 
   return <View style={styles.containerPrincipal}>
@@ -32,6 +31,7 @@ export default function Home(){
         <Text>Buscar Rota</Text>
 
       </Pressable>
+
     </View>
   </View>
 }

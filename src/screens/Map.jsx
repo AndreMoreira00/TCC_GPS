@@ -21,10 +21,6 @@ export default function Map(){
         Object.keys(localizacao).length > 0 &&
         <>
           <View>
-            {/* <Text>Latitude: {coordinates.latitude}</Text>
-            <Text>Longitude: {coordinates.longitude}</Text>
-            <Text>Latitude: {localizacao.coords.latitude}</Text>
-            <Text>Longitude: {localizacao.coords.longitude}</Text> */}
             <MapView 
               initialRegion={{
                 latitude: localizacao.coords.latitude,

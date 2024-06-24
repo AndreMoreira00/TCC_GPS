@@ -12,8 +12,6 @@ export default function MapRotas(){
   const [coordinates, setCoordinates] = useState(null);
   const [route, setRoute] = useState([]);
   const [localizacao, definirLocalizacao ] = useState({});
-
-  // const [hasFocusedOnce, setHasFocusedOnce] = useState(false);
   
   useEffect(function() {
     // Local atual
@@ -30,8 +28,7 @@ export default function MapRotas(){
   }, [])
 
   useFocusEffect(React.useCallback(() => {
-    // Aqui você pode colocar código para ser executado quando a tela estiver em foco
-    // console.log('Tela está em foco, recarregar dados se necessário');
+    // Executado quando a tela estiver em foco
     CarregarEndereco().then(function(dados){
       const add = JSON.parse(dados || "{}")
       alert(add)
@@ -63,7 +60,7 @@ export default function MapRotas(){
           q: address,
           format: 'json',
           addressdetails: 1,
-          limit: 1
+          limit: 2
         }
       });
       // console.log(response)

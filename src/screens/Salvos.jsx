@@ -1,22 +1,25 @@
 import React, {useState, useEffect} from "react";
 import {View, Text, TextInput, Pressable} from "react-native";
-import {SalvarAddress, Address} from "../functions/Salvar";
-import {CarregarLista} from "../functions/Carregar";
+import {Address, SalvarConteudo} from "../functions/Salvar";
+import {CarregarLista, ObterConteudo} from "../functions/Carregar";
 import styles from "../styles/Salvos";
 import { useNavigation } from "@react-navigation/native";
-// import SalvarConteudo from "../functions/Salvar";
+
 
 export default function Salvos(){
-
+    // Novo estado para carregar o conteudo do formulario
+    // const [conteudo, definirConteudo] = useState({})
+    // Navegar para o caminho do mapa 
     const navigation = useNavigation();
-
+    // Estado para preencher o formulario
     const [formulario, definirFormulario] = useState({
         nome:"",
         endereco:"",
     })
-
+    // Antigo carregador de conteudo
     const [resultados, definirResultado] = useState({})
 
+    // Antigo estado para carregar o conteudo do formulario salvo
     useEffect(function(){
         CarregarLista().then(function(dados){
         const valido = JSON.parse(dados || "{}")
@@ -26,15 +29,36 @@ export default function Salvos(){
         alert(erro)
         })
     },[formulario])
+
+    // Novo modelo para carregar o conteudo salvo pelo formulario
+    // useEffect(function(){
+    //     ObterConteudo().then(function(resposta){
+    //       if(resposta.status == 200){
+    //         definirConteudo(resposta.data)
+    //       }else{
+    //         console.log(resposta);
+    //       } 
+    //     }).catch(function(erro){
+    //       console.log(erro);
+    //     })
+    //   },[])
     
+    // Salvar Formulario Novo/Antigo
     function SalvarFormulario(){
-        // SalvarConteudo(formulario)
-        SalvarAddress(formulario.nome, formulario.endereco)
-        // Address(formulario.endereco)
+        // SalvarAddress(formulario.nome, formulario.endereco)
+        SalvarConteudo(formulario)
+        .then(function(resposta){
+            if (resposta.status === 201) return alert("Conteudo enviado com sucesso!")
+            else
+             return console.log(resposta)
+          })
+          .catch(function(erro){
+            return console.log(erro)
+          })
         definirFormulario({nome:"", endereco:""})
-        alert("Salvo com sucesso!")
     }
     
+    // Salvar e mandar o endereço para o mapa de rota
     function SalvarRota(){
         Address(resultados.endereco)
         navigation.navigate("MapRotas")
