@@ -1,14 +1,16 @@
 import React, {useState, useEffect} from "react";
-import {View, Text, TextInput, Pressable} from "react-native";
+import {ScrollView, View, Text, TextInput, Pressable, RefreshControl, ImageBackground} from "react-native";
 import {Address, SalvarConteudo} from "../functions/Salvar";
-import {CarregarLista, ObterConteudo} from "../functions/Carregar";
+import {ObterConteudo} from "../functions/Carregar";
 import styles from "../styles/Salvos";
 import { useNavigation } from "@react-navigation/native";
-
+import image1 from "../assets/image1.jpg";
+import image2 from "../assets/image2.jpg";
+import { Lista } from "../components/Lista";
 
 export default function Salvos(){
-    // Novo estado para carregar o conteudo do formulario
-    // const [conteudo, definirConteudo] = useState({})
+    // Novo estado para carregar o conteudo
+    const [conteudo, definirConteudo] = useState({})
     // Navegar para o caminho do mapa 
     const navigation = useNavigation();
     // Estado para preencher o formulario
@@ -16,39 +18,28 @@ export default function Salvos(){
         nome:"",
         endereco:"",
     })
-    // Antigo carregador de conteudo
-    const [resultados, definirResultado] = useState({})
-
-    // Antigo estado para carregar o conteudo do formulario salvo
-    useEffect(function(){
-        CarregarLista().then(function(dados){
-        const valido = JSON.parse(dados || "{}")
-        definirResultado(valido)
-        })
-        .catch(function(erro){
-        alert(erro)
-        })
-    },[formulario])
-
-    // Novo modelo para carregar o conteudo salvo pelo formulario
-    // useEffect(function(){
-    //     ObterConteudo().then(function(resposta){
-    //       if(resposta.status == 200){
-    //         definirConteudo(resposta.data)
-    //       }else{
-    //         console.log(resposta);
-    //       } 
-    //     }).catch(function(erro){
-    //       console.log(erro);
-    //     })
-    //   },[])
+    const [refreshing, setRefreshing] = useState(false);
     
-    // Salvar Formulario Novo/Antigo
+
+    // Modelo para carregar o conteudo salvo pelo formulario
+    useEffect(function(){
+        ObterConteudo().then(function(resposta){
+          if(resposta.status == 200){
+            definirConteudo(resposta.data)
+            // console.log(resposta.data)
+          }else{
+            console.log(resposta);
+          } 
+        }).catch(function(erro){
+          console.log(erro);
+        })
+    }, [])
+    
+    // Salvar Formulario 
     function SalvarFormulario(){
-        // SalvarAddress(formulario.nome, formulario.endereco)
         SalvarConteudo(formulario)
         .then(function(resposta){
-            if (resposta.status === 201) return alert("Conteudo enviado com sucesso!")
+            if (resposta.novoConteudo === 201) return alert("Conteudo enviado com sucesso!")
             else
              return console.log(resposta)
           })
@@ -57,32 +48,37 @@ export default function Salvos(){
           })
         definirFormulario({nome:"", endereco:""})
     }
-    
-    // Salvar e mandar o endereço para o mapa de rota
-    function SalvarRota(){
-        Address(resultados.endereco)
-        navigation.navigate("MapRotas")
-        // alert("Buscando Rota")
-    }
+
+      // Recarregar tela 
+      const handleRefresh = () => {
+        setRefreshing(true);
+        ObterConteudo().then(function(resposta){
+          if(resposta.status == 200){
+            definirConteudo(resposta.data)
+            setRefreshing(false)
+          }else{
+            console.log(resposta);
+          } 
+        }).catch(function(erro){
+          console.log(erro);
+          setRefreshing(false);
+        })
+      };
     
     return (
-        <View style={styles.containerPrincipal}>
-            {
-            Object.keys(resultados).length > 0 && <View style={styles.containerRotas}>
-
-                <Text style={styles.tituloPrincipal}>Rotas Salvas</Text>
-
-                <View>
-                    <Text style={styles.tituloTerciario}>{resultados.nome}</Text>
-                    <Text>{resultados.endereco}</Text>
-                    <Pressable style={styles.botao} onPress={SalvarRota}>
-                        <Text>Buscar Rota</Text>
-                    </Pressable>
-                </View>
-
-            </View>
-            }
-
+      <ImageBackground source={image1} style={styles.containerPrincipal}>
+        <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            tintColor={"#C356FC"}
+            progressBackgroundColor={"#fff"}
+            onRefresh={() => handleRefresh()}
+          />
+        }
+        >
+          <View style={styles.card}>
+            {/* Carregar Formulario */}
             <View style={styles.containerFormulario}>
 
                 <Text style={styles.tituloPrincipal}>Salvar nova Rota</Text>
@@ -95,20 +91,31 @@ export default function Salvos(){
                     value={formulario.nome}
                     onChangeText={valor => definirFormulario({...formulario, nome:valor})}
                     placeholder="Titulo"
+                    placeholderTextColor={"#fff"}
                     style={styles.textInput}/>
 
                     <TextInput
                     value={formulario.endereco}
                     onChangeText={valor => definirFormulario({...formulario, endereco:valor})}
                     placeholder="Endereco"
+                    placeholderTextColor={"#fff"}
                     style={styles.textInput}/>
 
                     <Pressable style={styles.botao} onPress={SalvarFormulario}>
-                        <Text>Enviar</Text>
+                        <Text style={{color: "#fff", fontSize:15, fontWeight:"bold"}}>Enviar</Text>
                     </Pressable> 
-
                 </View>   
             </View>
-        </View>
+
+            {/* Carregar Lista */}
+            <Text style={styles.tituloPrincipal}>Rotas Salvas</Text>
+            {
+                Object.keys(conteudo).length > 0 && <View style={styles.containerConteudos}>
+                    <Lista conteudos={conteudo}/>
+                </View>
+            }
+          </View>
+        </ScrollView>
+      </ImageBackground>
     );
 }

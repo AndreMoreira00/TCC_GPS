@@ -1,10 +1,14 @@
-import { View,Text, StyleSheet} from "react-native";
+import { View,Text, StyleSheet, Pressable, ImageBackground, Image} from "react-native";
 import React,{ useEffect, useState } from "react";
 import MapView, {Marker, Polyline} from "react-native-maps";
 import axios from "axios";
 import * as Location from "expo-location";
 import { CarregarEndereco } from "../functions/Carregar";
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import image1 from "../assets/image1.jpg";
+import lab from "../assets/Paper.gif";
+import image2 from "../assets/image2.jpg";
+
 
 export default function MapRotas(){
 
@@ -12,6 +16,7 @@ export default function MapRotas(){
   const [coordinates, setCoordinates] = useState(null);
   const [route, setRoute] = useState([]);
   const [localizacao, definirLocalizacao ] = useState({});
+  const navigation = useNavigation();
   
   useEffect(function() {
     // Local atual
@@ -19,21 +24,26 @@ export default function MapRotas(){
       await Location.requestForegroundPermissionsAsync()
       definirLocalizacao(await Location.getCurrentPositionAsync({}))
     }
-    CarregarEndereco().then(function(dados){
-      const add = JSON.parse(dados || "{}")
-      alert(add)
-      definirAddress(add)
-      });
+    // CarregarEndereco().then(function(dados){
+    //   const add = JSON.parse(dados || "{}")
+    //   // alert(add)
+    //   definirAddress(add)
+    //   });
     ObterLocaizacao()
   }, [])
+
+  // Clicar no link
+  function click(){
+    navigation.navigate('Home')
+  }
 
   useFocusEffect(React.useCallback(() => {
     // Executado quando a tela estiver em foco
     CarregarEndereco().then(function(dados){
       const add = JSON.parse(dados || "{}")
-      alert(add)
-      definirAddress(add)
-      getCoordinates(address);
+      // alert(add)
+      // definirAddress(add)
+      getCoordinates(add);
       const fetchRoute = async () => {
         try {
           const response = await axios.get(`http://router.project-osrm.org/route/v1/driving/${localizacao.coords.longitude},${localizacao.coords.latitude};${coordinates.longitude},${coordinates.latitude}?overview=full&geometries=geojson`);
@@ -44,7 +54,7 @@ export default function MapRotas(){
           }));
             setRoute(routeCoordinates);
         } catch (error) {
-          console.error(error);
+          // console.error(error);
         }
       };
       fetchRoute();
@@ -70,10 +80,10 @@ export default function MapRotas(){
         // console.log(lon)
         return setCoordinates({latitude: parseFloat(lat), longitude: parseFloat(lon)});
       } else {
-        throw new Error('Endereco não encontrado');
+        // throw new Error('Endereco não encontrado');
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       return null;
     }
   };
@@ -95,14 +105,13 @@ export default function MapRotas(){
         }));
           setRoute(routeCoordinates);
       } catch (error) {
-        console.error(error);
+        // console.error(error);
       }
     };
     fetchRoute();
   }, [coordinates])
 
-  return(
-    <View>
+  return <>
       {
         Object.keys(localizacao).length > 0 &&
         <>
@@ -128,9 +137,18 @@ export default function MapRotas(){
             </View>
             )}
         </>  
+      } 
+      {
+        coordinates == undefined && <ImageBackground source={image1} style={styles.zero}>
+            <View style={styles.card}>
+              <Pressable onPress={click}>
+                <Text style={styles.text}>Buscar Endereço</Text>
+              </Pressable>
+              <Image source={lab} style={{height:350, width:350, justifyContent:'center'}}/>
+            </View>
+          </ImageBackground>
       }
-    </View>
-  );
+  </>  
 }
 
 const styles = StyleSheet.create({
@@ -141,4 +159,26 @@ const styles = StyleSheet.create({
     height: "100%", width: "100%",
     marginTop: 30,
   },
+  text: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginTop: 15,
+    marginBottom: 5,
+    textAlign: 'center',
+  },
+  zero: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: "auto",
+    width: "100%"
+
+  },
+  card: {
+    backgroundColor: "#373B35",
+    padding: 15,
+    borderRadius: 15,
+    marginTop: 10,
+  }
 });

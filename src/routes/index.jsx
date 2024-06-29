@@ -15,10 +15,10 @@ export function Routes(){
     tabBarShowLabel:false,
     headerShown:false,
     tabBarStyle:{
-      backgroundColor: "#fff",
+      backgroundColor: "#000",
       borderTopWidth:0,
     },
-    tabBarActiveTintColor: "#000",
+    tabBarActiveTintColor: "#5C5CF7",
   }}>
     <Tab.Screen
     name="Home"

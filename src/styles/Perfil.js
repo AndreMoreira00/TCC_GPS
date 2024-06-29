@@ -5,37 +5,54 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f8f8f8',
     padding: 20,
   },
   containerImage: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f8f8f8',
     padding: 20,
   },
   profileImage: {
-    width: 230,
-    height: 230,
+    width: 170,
+    height: 170,
     borderRadius: 120,
-    marginBottom: 20,
     borderWidth: 5,
     borderStyle: "solid",
     borderColor: "#5252DF",
+    position: "absolute",
+    top: -180
   },
   description: {
     fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 20,
-    paddingHorizontal: 20,
+    color:"#fff",
+    textAlign: 'justify',
+    marginBottom: 30,
+    paddingHorizontal: 10,
+    fontWeight: "600",
   },
   socialMediaContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: '80%',
   },
   socialMediaIcon: {
     width: 50,
     height: 50,
+    marginBottom: 15
   },
+  nome: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign:"center",
+    marginBottom: 15,
+  },
+  card: {
+    backgroundColor: "#373B35",
+    padding: 15,
+    borderRadius:15,
+    paddingTop: 100,
+    borderWidth: 4,
+    borderStyle: "solid",
+    borderColor: "#5252DF",
+  }
 })

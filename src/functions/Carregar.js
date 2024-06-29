@@ -1,10 +1,6 @@
 import { getItemAsync } from "expo-secure-store";
 import axios from "axios";
 
-export async function CarregarLista(){
-  return await getItemAsync("consulta")
-}
-
 export async function CarregarEndereco(){
   return await getItemAsync("endereco")
 }
@@ -12,6 +8,6 @@ export async function CarregarEndereco(){
 export function ObterConteudo(){
   return axios({
     method: "GET",
-    url: "http://localhost:4000/enderecos",
+    url: "http://172.20.10.4:4000/enderecos",
   })
 }
