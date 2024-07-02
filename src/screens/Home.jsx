@@ -6,10 +6,6 @@ import { useNavigation } from "@react-navigation/native";
 import image1 from "../assets/image1.jpg";
 
 
-// Rodar sem mensagem de debug
-// expo run --no-dev
-
-
 export default function Home(){
 
   const navigation = useNavigation();

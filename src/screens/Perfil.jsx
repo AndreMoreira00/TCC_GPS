@@ -6,7 +6,6 @@ import git from '../assets/icongit.png';
 import link from '../assets/iconlink.png';
 import disc from '../assets/icondisc.png';
 import image1 from '../assets/image1.jpg';
-import image2 from "../assets/image2.jpg";
 
 export default function Perfil(){
   return (

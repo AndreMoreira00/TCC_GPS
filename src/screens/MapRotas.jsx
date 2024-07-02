@@ -7,14 +7,12 @@ import { CarregarEndereco } from "../functions/Carregar";
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import image1 from "../assets/image1.jpg";
 import lab from "../assets/Paper.gif";
-import image2 from "../assets/image2.jpg";
 
 
 export default function MapRotas(){
 
   const [address, definirAddress] = useState("")
   const [coordinates, setCoordinates] = useState(null);
-  const [route, setRoute] = useState([]);
   const [localizacao, definirLocalizacao ] = useState({});
   const navigation = useNavigation();
   
@@ -24,11 +22,6 @@ export default function MapRotas(){
       await Location.requestForegroundPermissionsAsync()
       definirLocalizacao(await Location.getCurrentPositionAsync({}))
     }
-    // CarregarEndereco().then(function(dados){
-    //   const add = JSON.parse(dados || "{}")
-    //   // alert(add)
-    //   definirAddress(add)
-    //   });
     ObterLocaizacao()
   }, [])
 
@@ -41,8 +34,6 @@ export default function MapRotas(){
     // Executado quando a tela estiver em foco
     CarregarEndereco().then(function(dados){
       const add = JSON.parse(dados || "{}")
-      // alert(add)
-      // definirAddress(add)
       getCoordinates(add);
       const fetchRoute = async () => {
         try {
@@ -55,6 +46,7 @@ export default function MapRotas(){
             setRoute(routeCoordinates);
         } catch (error) {
           // console.error(error);
+          // navigation.navigate("Home")
         }
       };
       fetchRoute();
@@ -73,14 +65,12 @@ export default function MapRotas(){
           limit: 2
         }
       });
-      // console.log(response)
       if (response.data.length > 0) {
         const {lat, lon} = response.data[0];
-        // console.log(lat)
-        // console.log(lon)
         return setCoordinates({latitude: parseFloat(lat), longitude: parseFloat(lon)});
       } else {
-        // throw new Error('Endereco não encontrado');
+        alert("Endereco não encontrado")
+        // navigation.navigate("Home")
       }
     } catch (error) {
       // console.error(error);
@@ -106,6 +96,7 @@ export default function MapRotas(){
           setRoute(routeCoordinates);
       } catch (error) {
         // console.error(error);
+        navigation.navigate("Home")
       }
     };
     fetchRoute();

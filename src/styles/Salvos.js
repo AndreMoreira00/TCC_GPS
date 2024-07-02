@@ -85,7 +85,7 @@ export default StyleSheet.create({
   },
   card: {
     backgroundColor: "#373B35",
-    padding: 10,
+    padding: 8,
     borderRadius: 15,
     marginTop: 24,
     borderWidth: 4,

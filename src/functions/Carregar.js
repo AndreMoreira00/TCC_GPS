@@ -5,9 +5,14 @@ export async function CarregarEndereco(){
   return await getItemAsync("endereco")
 }
 
+export async function CarregarID(){
+  return await getItemAsync("id")
+}
+
+
 export function ObterConteudo(){
   return axios({
     method: "GET",
-    url: "http://172.20.10.4:4000/enderecos",
+    url: "http://192.168.0.55:4000/enderecos",
   })
 }
