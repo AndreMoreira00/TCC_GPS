@@ -2,8 +2,9 @@ import React, {useState, useEffect} from "react";
 import {View, Text, TextInput, Pressable, RefreshControl, ImageBackground, ScrollView, FlatList, Modal} from "react-native";
 import {Address, ID, SalvarConteudo, AlterarNome} from "../functions/Salvar";
 import {ObterConteudo, CarregarID} from "../functions/Carregar";
+import { DeletarItem } from "../functions/Deletar";
 import styles from "../styles/Salvos";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import image1 from "../assets/image1.jpg";
 
 export default function Salvos(){
@@ -26,13 +27,6 @@ export default function Salvos(){
     })
     const [refreshing, setRefreshing] = useState(false);
     
-    useFocusEffect(React.useCallback(() => {
-      CarregarID().then(function(dados){
-        const key = JSON.parse(dados || "{}")
-        definirFormularioEditado({...formularioEditar, id: key})
-      })
-      }, [])
-    )
 
     // Modelo para carregar o conteudo salvo pelo formulario
     useEffect(function(){
@@ -86,7 +80,7 @@ export default function Salvos(){
 
     function PressID(id){
       // console.log("Salvar: ", id)
-      ID(id)
+      definirFormularioEditado({...formularioEditar, id: id})
       setModalVisible(true)
       // navigation.navigate('Editar')
     }
@@ -96,6 +90,12 @@ export default function Salvos(){
       navigation.navigate("MapRotas")
     }
     
+    function pressDeletar(id){
+      // console.log("Deletar: ", id)
+      DeletarItem(id)
+      setModalVisible(!modalVisible)
+    }
+
     const Lista = ({item}) =>(
       <View style={styles.containerDado}>
         <Pressable onPress={() => SalvarRota(item.endereco)}>
@@ -105,10 +105,13 @@ export default function Salvos(){
         <Pressable style={styles.botao} onPress={() => PressID(item._id)}>
           <Text style={{color: "#fff", fontSize:15, fontWeight:"bold"}}>Editar</Text>
         </Pressable>
+        
       </View>
     );
 
-    function press(){
+    
+
+    function pressAlterar(){
       AlterarNome(formularioEditar)
       setModalVisible(!modalVisible)
       definirFormularioEditado({
@@ -117,6 +120,7 @@ export default function Salvos(){
         endereco: "",
       })
     }
+
     function voltar(){
       setModalVisible(!modalVisible)
       definirFormularioEditado({
@@ -126,6 +130,7 @@ export default function Salvos(){
       })
     }
 
+    
 
     return (
       <ImageBackground source={image1} style={styles.containerPrincipal}>
@@ -212,7 +217,7 @@ export default function Salvos(){
                           minLength={5}
                           style={styles.textInput}/>
 
-                          <Pressable style={styles.botao} onPress={press}>
+                          <Pressable style={styles.botao} onPress={pressAlterar}>
                               <Text style={{color: "#fff", fontSize:15, fontWeight:"bold"}}>Enviar</Text>
                           </Pressable> 
                           
@@ -220,6 +225,9 @@ export default function Salvos(){
                     </View>
                     <Pressable style={styles.botao} onPress={voltar}>
                         <Text style={{color: "#fff", fontSize:15, fontWeight:"bold"}}>Voltar</Text>
+                    </Pressable>
+                    <Pressable style={styles.botao} onPress={() => pressDeletar(formularioEditar.id)}>
+                        <Text style={{color: "#fff", fontSize:15, fontWeight:"bold"}}>Deletar</Text>
                     </Pressable>
                   </View>
                 </ImageBackground>
