@@ -2,7 +2,7 @@
 
 ## Resumo do Projeto
 
-O projeto **TCC_GPS** é um sistema completo de rastreamento e monitoramento de veículos e ativos móveis em tempo real, utilizando tecnologia GPS. Este sistema foi desenvolvido como parte de um Trabalho de Conclusão de Curso (TCC) e tem como objetivo oferecer uma solução robusta e eficiente para acompanhar a localização de objetos, enviar alertas de segurança, e gerar relatórios detalhados sobre trajetos e eventos.
+O projeto **TCC_GPS** é um sistema completo de rastreamento de ativos móveis em tempo real, utilizando tecnologia GPS. Este sistema foi desenvolvido como parte de um Trabalho de Conclusão de Curso (TCC).
 
 O sistema é composto por um backend que lida com a coleta, processamento e armazenamento dos dados, e um frontend que permite a visualização e interação com as informações geoespaciais de forma intuitiva.
 
@@ -20,28 +20,6 @@ O sistema é composto por um backend que lida com a coleta, processamento e arma
 - **[React.js](https://reactjs.org/):** Biblioteca JavaScript para construção de interfaces de usuário dinâmicas e interativas.
 - **[Leaflet](https://leafletjs.com/):** Biblioteca JavaScript para criação de mapas interativos e visualização de dados de GPS.
 - **[Axios](https://axios-http.com/):** Cliente HTTP para comunicação entre o frontend e o backend.
-
-### Outros
-- **[Docker](https://www.docker.com/):** Ferramenta de containerização para garantir a portabilidade e consistência do ambiente.
-- **[Heroku](https://www.heroku.com/):** Plataforma de nuvem usada para hospedar a aplicação.
-
-## Funcionalidades Principais
-
-### `Autenticação e Gerenciamento de Usuários`
-- Implementação de autenticação segura utilizando JWT.
-- CRUD de usuários, com diferentes níveis de permissão (administrador, usuário comum).
-
-### `Rastreamento e Monitoramento`
-- Recepção e processamento de dados de localização em tempo real via WebSocket.
-- Visualização dos trajetos e localização atual dos ativos em um mapa interativo.
-
-### `Geofencing e Alertas`
-- Configuração de áreas geográficas monitoradas (geofences) para disparar alertas quando um ativo entra ou sai dessas áreas.
-- Notificações em tempo real para eventos de segurança e violações de geofencing.
-
-### `Relatórios e Histórico`
-- Armazenamento de trajetos e eventos para consultas e análise posterior.
-- Geração de relatórios detalhados sobre movimentação, paradas e outros eventos relevantes.
 
 ## Estrutura de Pastas
 
